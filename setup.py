@@ -3,17 +3,12 @@
 from distutils.core import setup, Extension
 from distutils.command.build_ext import build_ext
 import git
+import numpy
 
 class CustomBuildExtCommand(build_ext):
     """build_ext command for use when numpy headers are needed."""
 
     def run(self):
-
-        # Import numpy here, only when headers are needed
-        import numpy
-        # Add numpy headers to include_dirs
-        self.include_dirs.append(numpy.get_include())
-        
         # Call original build_ext command
         build_ext.run(self)
 
@@ -22,7 +17,7 @@ ext_modules = [
     Extension(
         "wormbrain.reg._dsmm_c",
         sources=["dsmm/dsmm.cpp", "dsmm/dsmm_utils.cpp", "wormbrain/reg/_dsmm_c.cpp"],
-        include_dirs=["dsmm"],
+        include_dirs=["dsmm", numpy.get_include()],
         extra_compile_args=["-ffast-math", "-O3"],
     )
 ]

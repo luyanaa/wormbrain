@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <iostream>
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 #include <boost/math/special_functions/digamma.hpp>
 
 void dsmm::_dsmm(double *X, double *Y, int M, int N, int D,

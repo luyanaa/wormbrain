@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <utility>
 #include <cmath>
-#include <Eigen/Dense>
+#include <eigen3/Eigen/Dense>
 #include <boost/math/tools/roots.hpp>
 #include <boost/math/special_functions/digamma.hpp>
 
