@@ -1,5 +1,5 @@
 '''The class Brains is made available in the wormbrain namespace.'''
-
+# TODO: Cannot import wormbrain.match. 
 import numpy as np
 import matplotlib.pyplot as plt
 import mistofrutta.struct.irrarray as irrarray
@@ -275,7 +275,7 @@ class Brains:
                 if verbose:
                     print("Cached reference Brain not available or needs to"+\
                           "be updated.")
-                match_info = wormb.match.load_match_parameters(folder)
+                match_info = match.load_match_parameters(folder)
                 ref_index = match_info["ref_index"]
                 print("Creating cached reference with volume "+\
                           str(ref_index)+".")
@@ -704,7 +704,7 @@ class Brains:
         
     def load_matches(self,folder):
         if self.MMatch is None:
-            self.MMatch, self.MMatch_parameters = wormb.match.load_matches(folder) 
+            self.MMatch, self.MMatch_parameters = match.load_matches(folder) 
         
     def trueCoords(self, vol, coord_ordering='zyx'):#, returnIrrarray=False):
         '''Returns the coordinates of the neurons contained in the specified
@@ -727,7 +727,7 @@ class Brains:
         
         if type(vol)!=list: vol = [vol]
         # Get the neurons in the requested volumes
-        trueCoords = self.coord(vol=vol, dtype=np.float)
+        trueCoords = self.coord(vol=vol, dtype=np.float64)
         intCoords = self.coord(vol=vol)
         
         try:
@@ -858,7 +858,7 @@ class Brains:
             
     @staticmethod
     def _conv_coord_2d_to_3d(coord_2d, volFrame0, zOfFrame=[], dz=1, 
-            dtype=np.float, coord_2d_ordering='yx', coord_3d_ordering='zyx'):
+            dtype=np.float64, coord_2d_ordering='yx', coord_3d_ordering='zyx'):
         '''Converts coordinates from a list of np.array([[y,x],]) for one frame 
         to a list of np.array([[z,y,x],]) for each volume, with the 
         corresponding number of neurons in each volume.
@@ -1125,7 +1125,7 @@ class Brains:
         z_index = z_indices[coord_3d_ordering]
         
         # Build z range around 0 for specified nPlanes
-        z = np.arange(-(nPlane//2),nPlane//2+1,dtype=np.float)
+        z = np.arange(-(nPlane//2),nPlane//2+1,dtype=np.float64)
         
         curv = np.zeros((coord.shape[0],nPlane))
         if method=="xyMaxCurvature":
@@ -1153,12 +1153,12 @@ class Brains:
             curv *= -1.0
             np.clip(curv,0,None,curv)
         
-        coord_3d_out = np.zeros_like(coord,dtype=np.float)
+        coord_3d_out = np.zeros_like(coord,dtype=np.float64)
         if coord_3d_ordering=="zyx":
             coord_3d_out[:,1:3] = coord[:,1:3]
         else:
             coord_3d_out[:,0:2] = coord[:,0:2]
-        coord_3d_out[:,z_index] = coord[:,z_index].astype(np.float) + np.sum(z*curv,axis=1)/np.sum(curv,axis=1)
+        coord_3d_out[:,z_index] = coord[:,z_index].astype(np.float64) + np.sum(z*curv,axis=1)/np.sum(curv,axis=1)
         
         return coord_3d_out
     
@@ -1175,7 +1175,7 @@ class Brains:
         x_index = x_indices[coord_3d_ordering]
         
         # Build z range around 0 for specified nPlanes
-        x = np.arange(-(nPixelsMax//2),nPixelsMax//2+1,dtype=np.float)
+        x = np.arange(-(nPixelsMax//2),nPixelsMax//2+1,dtype=np.float64)
         
         curv = np.zeros((coord.shape[0],nPixelsMax))
         if method=="curvatureAverage":
@@ -1188,13 +1188,13 @@ class Brains:
                 c = np.average(flipped_curv,axis=1)
                 curv[:,pl] = c
         
-        coord_3d_out = np.zeros_like(coord,dtype=np.float)
+        coord_3d_out = np.zeros_like(coord,dtype=np.float64)
         if coord_3d_ordering=="zyx":
             coord_3d_out[:,0:2] = coord[:,0:2]
         else:
             coord_3d_out[:,1:3] = coord[:,1:3]
         
-        coord_3d_out[:,x_index] = coord[:,x_index].astype(np.float) + np.sum(x*curv,axis=1)/np.sum(curv,axis=1) * curvatureImageResize
+        coord_3d_out[:,x_index] = coord[:,x_index].astype(np.float64) + np.sum(x*curv,axis=1)/np.sum(curv,axis=1) * curvatureImageResize
         
         return coord_3d_out
     
@@ -1209,7 +1209,7 @@ class Brains:
         y_index = 1
         
         # Build z range around 0 for specified nPlanes
-        y = np.arange(-(nPixelsMax//2),nPixelsMax//2+1,dtype=np.float)
+        y = np.arange(-(nPixelsMax//2),nPixelsMax//2+1,dtype=np.float64)
         
         curv = np.zeros((coord.shape[0],nPixelsMax))
         if method=="curvatureAverage":
@@ -1222,10 +1222,10 @@ class Brains:
                 c = np.average(flipped_curv,axis=1)
                 curv[:,pl] = c
         
-        coord_3d_out = np.zeros_like(coord,dtype=np.float)
+        coord_3d_out = np.zeros_like(coord,dtype=np.float64)
         coord_3d_out[:,0] = coord[:,0]
         coord_3d_out[:,2] = coord[:,2]
-        coord_3d_out[:,y_index] = coord[:,y_index].astype(np.float) + np.sum(y*curv,axis=1)/np.sum(curv,axis=1)
+        coord_3d_out[:,y_index] = coord[:,y_index].astype(np.float64) + np.sum(y*curv,axis=1)/np.sum(curv,axis=1)
         
         return coord_3d_out
         

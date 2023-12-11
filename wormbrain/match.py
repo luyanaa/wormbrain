@@ -6,7 +6,7 @@ import wormbrain as wormb
 import pkg_resources
 import os
 import pickle
-import fdlc
+# import fdlc Deleted due to missing of fdic package.
 
 filename_matches = "matches.txt"
 
